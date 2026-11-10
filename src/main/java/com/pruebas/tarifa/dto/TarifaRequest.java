@@ -1,5 +1,6 @@
 package com.pruebas.tarifa.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,8 @@ public class TarifaRequest {
     private Integer pnuAntgVeh;
 
     @NotNull(message = "PNU_EDACLI es obligatorio")
-    @Min(value = 0, message = "PNU_EDACLI debe ser mayor o igual a 0")
+    @Min(value = 18, message = "La edad del cliente debe ser mayor o igual a 18 años")
+    @Max(value = 99, message = "La edad del cliente no puede superar los 99 años")
     private Integer pnuEdacli;
 
     @NotNull(message = "PNU_CANSINI es obligatorio")

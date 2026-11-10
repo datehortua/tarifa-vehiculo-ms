@@ -24,7 +24,6 @@ public class TarifaController {
      */
     @PostMapping("/calcular")
     public ResponseEntity<TarifaResponse> calcular(@Valid @RequestBody TarifaRequest request) {
-        TarifaResponse response = tarifaService.calcularTarifa(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(tarifaService.calcularTarifa(request));
     }
 }
