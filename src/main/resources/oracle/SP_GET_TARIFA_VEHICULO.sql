@@ -10,6 +10,15 @@ CREATE OR REPLACE NONEDITIONABLE PACKAGE PCK_SEGUROS_VEHICULO AS
     PNU_SALERR OUT NUMBER,
     PVA_SALERR OUT VARCHAR2
   );
+
+  FUNCTION FN_REGNEG_SEGVEH (
+      PNU_VALCOM_VEH IN NUMBER,
+      PNU_ANTG_VEH   IN NUMBER,
+      PNU_EDACLI     IN NUMBER,
+      PNU_CANSINI    IN NUMBER,
+      PNU_VALERR     IN OUT NUMBER,
+      PVA_VALRET     IN OUT VARCHAR2
+  ) RETURN BOOLEAN ;
 END PCK_SEGUROS_VEHICULO;
 /
 
@@ -61,6 +70,57 @@ CREATE OR REPLACE NONEDITIONABLE PACKAGE BODY PCK_SEGUROS_VEHICULO AS
           PNU_SALERR := 99;
           PVA_SALERR := 'Error de inconsistencia en calculos de prima';
   END SP_GET_TARIFA_VEHICULO;
+
+    FUNCTION FN_REGNEG_SEGVEH (
+        PNU_VALCOM_VEH IN NUMBER,
+        PNU_ANTG_VEH   IN NUMBER,
+        PNU_EDACLI     IN NUMBER,
+        PNU_CANSINI    IN NUMBER,
+        PNU_VALERR     IN OUT NUMBER,
+        PVA_VALRET     IN OUT VARCHAR2
+    ) RETURN BOOLEAN
+    IS
+        -- Variables locales y constantes
+        LNU_VALMINCOM_VEH       NUMBER(12) := 20000000;
+        LNU_MAXANT_VEH_SINREC   NUMBER(2)  := 1;
+        LNU_MAXEDA_CLI_CONREC   NUMBER(2)  := 18;
+        LNU_MAXCAN_SINI_SINREC  NUMBER(2)  := 99;
+        LBO_VALRET              BOOLEAN := FALSE;
+
+        LNU_CODERR1 CONSTANT NUMBER(1) := 1 ;
+        LVA_CODERR1 CONSTANT VARCHAR2(50) := 'Error Valor comercial no válido' ;
+        LNU_CODERR2 CONSTANT NUMBER(1) := 2 ;
+        LVA_CODERR2 CONSTANT VARCHAR2(50) := 'Error Antiguedad no válida' ;
+        LNU_CODERR3 CONSTANT NUMBER(1) := 3 ;
+        LVA_CODERR3 CONSTANT VARCHAR2(50) := 'Error Edad cliente no válida' ;
+        LNU_CODERR4 CONSTANT NUMBER(1) := 4 ;
+        LVA_CODERR4 CONSTANT VARCHAR2(50) := 'Error Cantidad de siniestros no válida' ;
+    BEGIN
+        -- Lógica de negocio
+        IF (PNU_VALCOM_VEH < LNU_VALMINCOM_VEH) THEN
+            LBO_VALRET := FALSE;
+            PNU_VALERR := LNU_CODERR1;
+            PVA_VALRET := LVA_CODERR1;
+        ELSIF (PNU_ANTG_VEH < LNU_MAXANT_VEH_SINREC) THEN
+            LBO_VALRET := FALSE;
+            PNU_VALERR := LNU_CODERR2;
+            PVA_VALRET := LVA_CODERR2;
+        ELSIF (PNU_EDACLI < LNU_MAXEDA_CLI_CONREC) THEN
+            LBO_VALRET := FALSE;
+            PNU_VALERR := LNU_CODERR3;
+            PVA_VALRET := LVA_CODERR3;
+        ELSIF (PNU_CANSINI >= LNU_MAXCAN_SINI_SINREC) THEN
+            LBO_VALRET := FALSE;
+            PNU_VALERR := LNU_CODERR4;
+            PVA_VALRET := LVA_CODERR4;
+        ELSE
+            LBO_VALRET := TRUE;
+            PNU_VALERR := 0;
+            PVA_VALRET := NULL;
+        END IF;
+
+        RETURN LBO_VALRET;
+    END FN_REGNEG_SEGVEH;
 
 END PCK_SEGUROS_VEHICULO;
 /

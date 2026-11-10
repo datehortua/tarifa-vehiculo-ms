@@ -43,6 +43,15 @@
             <version>${ojdbc.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-oracle</artifactId>
+        </dependency>
+
         <!-- Validación -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

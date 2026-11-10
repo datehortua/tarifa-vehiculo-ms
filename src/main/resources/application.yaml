@@ -4,6 +4,20 @@ server:
 spring:
   application:
     name: tarifa-vehiculo-api
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    table: flyway_historial_nuevo
+    baseline-on-migrate: true
+    baseline-version: 0
+    clean-disabled: false
+    schemas: SYSTEM
+    clean-on-validation-error: true
+  oracle:
+    sqlplus: true
+  logging:
+    level:
+    org.flywaydb: DEBUG
 
   datasource:
     url: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
