@@ -5,14 +5,13 @@ spring:
   application:
     name: tarifa-vehiculo-api
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
-    table: flyway_historial_nuevo
+    table: flyway_schema_history
     baseline-on-migrate: true
     baseline-version: 0
-    clean-disabled: false
-    schemas: SYSTEM
-    clean-on-validation-error: true
+    oracle:
+      sqlplus: true
   oracle:
     sqlplus: true
   logging:
