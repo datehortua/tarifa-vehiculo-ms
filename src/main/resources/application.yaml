@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: tarifa-vehiculo-api
+
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
+    username: SYSTEM
+    password: Dbasql
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      pool-name: TarifaHikariPool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      # Validación de conexión Oracle
+      connection-test-query: SELECT 1 FROM DUAL
+
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+logging:
+  level:
+    root: INFO
+    com.ejemplo.tarifa: DEBUG
+    org.springframework.jdbc.core: DEBUG
